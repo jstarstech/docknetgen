@@ -1,0 +1,19 @@
+services:
+{% for svc in services %}
+  ubuntu-custom-{{ svc.index }}:
+    container_name: ubuntu-custom-{{ svc.index }}
+    image: ubuntu:24.04
+    networks:
+      demonet{{ svc.index }}:
+        mac_address: "09:0d:e2:2a:7f:08"
+        ipv4_address: {{ svc.ip_address }}
+{% endfor %}
+
+networks:
+{% for svc in services %}
+  demonet{{ svc.index }}:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: {{ svc.subnet }}
+{% endfor %}
